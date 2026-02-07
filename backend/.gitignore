@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.mypy_cache/
+
+# Virtual environments
+venv/
+.venv/
+.env/
+.env.*
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# FastAPI
+*.log
+
+# Alembic
+alembic/versions/__pycache__/
+
+# PostgreSQL
+*.sql
+*.dump
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Coverage / reports
+.coverage
+htmlcov/
+
+# Build
+dist/
+build/
