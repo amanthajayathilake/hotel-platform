@@ -219,13 +219,38 @@ const HotelDetailPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {roomTypes.map((roomType) => (
             <Card key={roomType.id} hover>
+              {/* Room Type Images */}
+              {roomType.images && roomType.images.length > 0 ? (
+                <div className="h-48 bg-gradient-to-br from-primary-100 to-primary-200 relative">
+                  <img
+                    src={roomType.images[0]}
+                    alt={roomType.name}
+                    className="w-full h-full object-cover"
+                  />
+                  {roomType.images.length > 1 && (
+                    <div className="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
+                      +{roomType.images.length - 1} more
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-gray-300 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                      <span className="text-gray-500 text-2xl">🛏️</span>
+                    </div>
+                    <p className="text-sm text-gray-500">No images</p>
+                  </div>
+                </div>
+              )}
+
               <CardBody>
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">
                       {roomType.name}
                     </h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 mt-1">
                       {roomType.description}
                     </p>
                   </div>
@@ -248,6 +273,21 @@ const HotelDetailPage = () => {
                     </Button>
                   </div>
                 </div>
+
+                {/* Image Gallery (if multiple images) */}
+                {roomType.images && roomType.images.length > 1 && (
+                  <div className="grid grid-cols-3 gap-2 mb-4">
+                    {roomType.images.slice(0, 3).map((img, idx) => (
+                      <img
+                        key={idx}
+                        src={img}
+                        alt={`${roomType.name} ${idx + 1}`}
+                        className="w-full h-16 object-cover rounded cursor-pointer hover:opacity-75 transition-opacity"
+                        onClick={() => window.open(img, "_blank")}
+                      />
+                    ))}
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">

@@ -1,7 +1,7 @@
-import { Outlet, Link, useNavigate } from 'react-router-dom';
-import { Hotel, LogOut, User } from 'lucide-react';
-import { useAuthStore } from '@/store/authStore';
-import Button from './ui/Button';
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Hotel, LogOut, User } from "lucide-react";
+import { useAuthStore } from "@/store/authStore";
+import Button from "./ui/Button";
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ const Layout = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
@@ -36,11 +36,7 @@ const Layout = () => {
                     <User className="w-4 h-4 text-gray-500" />
                     <span className="text-gray-700">{user.username}</span>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleLogout}
-                  >
+                  <Button variant="ghost" size="sm" onClick={handleLogout}>
                     <LogOut className="w-4 h-4 mr-2" />
                     Logout
                   </Button>
@@ -60,7 +56,8 @@ const Layout = () => {
       <footer className="bg-white border-t border-gray-200 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <p className="text-center text-sm text-gray-600">
-            © 2025 Hotel Management System. All rights reserved.
+            © {new Date().getFullYear()} Hotel Management System. All rights
+            reserved.
           </p>
         </div>
       </footer>

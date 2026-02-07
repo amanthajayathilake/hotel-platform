@@ -13,6 +13,11 @@ venv/
 .env/
 .env.*
 
+# Env files
+.env
+.env.*
+!.env.example
+
 # FastAPI
 *.log
 

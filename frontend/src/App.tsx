@@ -1,17 +1,19 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
-import { useEffect } from 'react';
-import { useAuthStore } from './store/authStore';
-import LoginPage from './pages/LoginPage';
-import HotelsPage from './pages/HotelsPage';
-import HotelDetailPage from './pages/HotelDetailPage';
-import Layout from './components/Layout';
-import Loading from './components/ui/Loading';
+import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import Layout from "./components/Layout";
+import Loading from "./components/ui/Loading";
+import HotelDetailPage from "./pages/HotelDetailPage";
+import HotelFormPage from "./pages/HotelFormPage";
+import HotelsPage from "./pages/HotelsPage";
+import LoginPage from "./pages/LoginPage";
+import RoomTypeFormPage from "./pages/RoomTypeFormPage";
+import { useAuthStore } from "./store/authStore";
 
 // Protected Route wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { token } = useAuthStore();
-  
+
   if (!token) {
     return <Navigate to="/login" replace />;
   }
@@ -22,7 +24,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 // Public Route wrapper (redirects to hotels if already logged in)
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { token } = useAuthStore();
-  
+
   if (token) {
     return <Navigate to="/hotels" replace />;
   }
@@ -68,6 +70,12 @@ function App() {
             <Route index element={<Navigate to="/hotels" replace />} />
             <Route path="hotels" element={<HotelsPage />} />
             <Route path="hotels/:id" element={<HotelDetailPage />} />
+            <Route path="hotels/new" element={<HotelFormPage />} />
+            <Route path="hotels/:id/edit" element={<HotelFormPage />} />
+            <Route
+              path="hotels/:hotelId/room-types/new"
+              element={<RoomTypeFormPage />}
+            />
           </Route>
 
           {/* Catch all - redirect to hotels */}
@@ -81,19 +89,19 @@ function App() {
         toastOptions={{
           duration: 3000,
           style: {
-            background: '#fff',
-            color: '#363636',
+            background: "#fff",
+            color: "#363636",
           },
           success: {
             iconTheme: {
-              primary: '#10b981',
-              secondary: '#fff',
+              primary: "#10b981",
+              secondary: "#fff",
             },
           },
           error: {
             iconTheme: {
-              primary: '#ef4444',
-              secondary: '#fff',
+              primary: "#ef4444",
+              secondary: "#fff",
             },
           },
         }}
