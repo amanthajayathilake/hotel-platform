@@ -1,13 +1,13 @@
-import { create } from 'zustand';
-import { authAPI } from '@/api/client';
-import type { User, LoginCredentials } from '@/types';
+import { create } from "zustand";
+import { authAPI } from "@/api/client";
+import type { User, LoginCredentials } from "@/types";
 
 interface AuthState {
   user: User | null;
   token: string | null;
   isLoading: boolean;
   error: string | null;
-  
+
   // Actions
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => void;
@@ -17,7 +17,7 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  token: localStorage.getItem('access_token'),
+  token: localStorage.getItem("access_token"),
   isLoading: false,
   error: null,
 
@@ -26,16 +26,17 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       const response = await authAPI.login(credentials);
       const token = response.access_token;
-      
+
       // Store token in localStorage
-      localStorage.setItem('access_token', token);
-      
+      localStorage.setItem("access_token", token);
+
       // Fetch user data
       const user = await authAPI.getCurrentUser();
-      
+
       set({ user, token, isLoading: false });
     } catch (error: any) {
-      const errorMessage = error.response?.data?.detail || 'Login failed. Please try again.';
+      const errorMessage =
+        error.response?.data?.detail || "Login failed. Please try again.";
       set({ error: errorMessage, isLoading: false });
       throw error;
     }
@@ -43,14 +44,14 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: () => {
     // Clear localStorage
-    localStorage.removeItem('access_token');
-    
+    localStorage.removeItem("access_token");
+
     // Clear state
     set({ user: null, token: null, error: null });
   },
 
   fetchCurrentUser: async () => {
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem("access_token");
     if (!token) {
       set({ user: null, token: null });
       return;
@@ -62,7 +63,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ user, token, isLoading: false });
     } catch (error) {
       // Token is invalid, clear it
-      localStorage.removeItem('access_token');
+      localStorage.removeItem("access_token");
       set({ user: null, token: null, isLoading: false });
     }
   },

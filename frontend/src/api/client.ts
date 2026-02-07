@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError } from "axios";
 import type {
   AuthResponse,
   User,
@@ -7,23 +7,23 @@ import type {
   RateAdjustment,
   LoginCredentials,
   MessageResponse,
-} from '@/types';
+} from "@/types";
 
 // Base API URL - will use Vite proxy in development
-const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_URL || "/api/v1";
 
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem("access_token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -39,9 +39,14 @@ api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-      // Clear token and redirect to login
-      localStorage.removeItem('access_token');
-      window.location.href = '/login';
+      // Don't redirect to login if the request was to the login endpoint itself
+      const isLoginRequest = error.config?.url?.includes("/auth/login");
+
+      if (!isLoginRequest) {
+        // Clear token and redirect to login
+        localStorage.removeItem("access_token");
+        window.location.href = "/login";
+      }
     }
     return Promise.reject(error);
   }
@@ -50,20 +55,23 @@ api.interceptors.response.use(
 // Authentication API
 export const authAPI = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>('/auth/login', credentials);
+    const response = await api.post<AuthResponse>("/auth/login", credentials);
     return response.data;
   },
 
   getCurrentUser: async (): Promise<User> => {
-    const response = await api.get<User>('/auth/me');
+    const response = await api.get<User>("/auth/me");
     return response.data;
   },
 };
 
 // Hotels API
 export const hotelsAPI = {
-  getAll: async (params?: { status?: string; city?: string }): Promise<Hotel[]> => {
-    const response = await api.get<Hotel[]>('/hotels', { params });
+  getAll: async (params?: {
+    status?: string;
+    city?: string;
+  }): Promise<Hotel[]> => {
+    const response = await api.get<Hotel[]>("/hotels", { params });
     return response.data;
   },
 
@@ -73,15 +81,15 @@ export const hotelsAPI = {
   },
 
   create: async (formData: FormData): Promise<Hotel> => {
-    const response = await api.post<Hotel>('/hotels', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    const response = await api.post<Hotel>("/hotels", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
     });
     return response.data;
   },
 
   update: async (id: number, formData: FormData): Promise<Hotel> => {
     const response = await api.put<Hotel>(`/hotels/${id}`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { "Content-Type": "multipart/form-data" },
     });
     return response.data;
   },
@@ -96,7 +104,7 @@ export const hotelsAPI = {
 export const roomTypesAPI = {
   getAll: async (hotelId?: number): Promise<RoomType[]> => {
     const params = hotelId ? { hotel_id: hotelId } : {};
-    const response = await api.get<RoomType[]>('/room-types', { params });
+    const response = await api.get<RoomType[]>("/room-types", { params });
     return response.data;
   },
 
@@ -106,15 +114,15 @@ export const roomTypesAPI = {
   },
 
   create: async (formData: FormData): Promise<RoomType> => {
-    const response = await api.post<RoomType>('/room-types', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    const response = await api.post<RoomType>("/room-types", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
     });
     return response.data;
   },
 
   update: async (id: number, formData: FormData): Promise<RoomType> => {
     const response = await api.put<RoomType>(`/room-types/${id}`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { "Content-Type": "multipart/form-data" },
     });
     return response.data;
   },
@@ -129,7 +137,9 @@ export const roomTypesAPI = {
 export const rateAdjustmentsAPI = {
   getAll: async (roomTypeId?: number): Promise<RateAdjustment[]> => {
     const params = roomTypeId ? { room_type_id: roomTypeId } : {};
-    const response = await api.get<RateAdjustment[]>('/rate-adjustments', { params });
+    const response = await api.get<RateAdjustment[]>("/rate-adjustments", {
+      params,
+    });
     return response.data;
   },
 
@@ -144,12 +154,14 @@ export const rateAdjustmentsAPI = {
     effective_date: string;
     reason: string;
   }): Promise<RateAdjustment> => {
-    const response = await api.post<RateAdjustment>('/rate-adjustments', data);
+    const response = await api.post<RateAdjustment>("/rate-adjustments", data);
     return response.data;
   },
 
   delete: async (id: number): Promise<MessageResponse> => {
-    const response = await api.delete<MessageResponse>(`/rate-adjustments/${id}`);
+    const response = await api.delete<MessageResponse>(
+      `/rate-adjustments/${id}`
+    );
     return response.data;
   },
 

@@ -1,19 +1,19 @@
-import { useState, FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Hotel, Lock } from 'lucide-react';
-import toast from 'react-hot-toast';
-import { useAuthStore } from '@/store/authStore';
-import Button from '@/components/ui/Button';
-import Input from '@/components/ui/Input';
-import { Card, CardBody } from '@/components/ui/Card';
+import { useState, FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
+import { Hotel, Lock } from "lucide-react";
+import toast from "react-hot-toast";
+import { useAuthStore } from "@/store/authStore";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import { Card, CardBody } from "@/components/ui/Card";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login, isLoading, error, clearError } = useAuthStore();
-  
+
   const [credentials, setCredentials] = useState({
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   });
 
   const handleSubmit = async (e: FormEvent) => {
@@ -22,10 +22,10 @@ const LoginPage = () => {
 
     try {
       await login(credentials);
-      toast.success('Login successful!');
-      navigate('/hotels');
+      toast.success("Login successful!");
+      navigate("/hotels");
     } catch (err) {
-      toast.error('Login failed. Please check your credentials.');
+      toast.error("Login failed. Please check your credentials.");
     }
   };
 
@@ -51,7 +51,9 @@ const LoginPage = () => {
               type="text"
               placeholder="Enter your username"
               value={credentials.username}
-              onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+              onChange={(e) =>
+                setCredentials({ ...credentials, username: e.target.value })
+              }
               required
               autoFocus
             />
@@ -61,7 +63,9 @@ const LoginPage = () => {
               type="password"
               placeholder="Enter your password"
               value={credentials.password}
-              onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+              onChange={(e) =>
+                setCredentials({ ...credentials, password: e.target.value })
+              }
               required
             />
 
@@ -85,9 +89,15 @@ const LoginPage = () => {
 
           {/* Demo Credentials */}
           <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm font-medium text-blue-900 mb-2">Demo Credentials:</p>
-            <p className="text-xs text-blue-700">Username: <span className="font-mono">admin</span></p>
-            <p className="text-xs text-blue-700">Password: <span className="font-mono">admin123</span></p>
+            <p className="text-sm font-medium text-blue-900 mb-2">
+              Demo Credentials:
+            </p>
+            <p className="text-xs text-blue-700">
+              Username: <span className="font-mono">admin</span>
+            </p>
+            <p className="text-xs text-blue-700">
+              Password: <span className="font-mono">admin123</span>
+            </p>
           </div>
         </CardBody>
       </Card>
